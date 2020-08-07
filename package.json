@@ -1,0 +1,29 @@
+{
+  "name": "solar-analytics",
+  "version": "1.0.0",
+  "description": "I wanted more control over the data that comes from my solar inverter, so i am building my own tracking system.",
+  "main": "solar_app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t3rr11/SolarAnalytics.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/t3rr11/SolarAnalytics/issues"
+  },
+  "homepage": "https://github.com/t3rr11/SolarAnalytics#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "discord.js": "^11.5.1",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "fs-extra": "^8.1.0",
+    "mysql": "^2.17.1",
+    "node-fetch": "^2.6.0",
+    "request": "^2.88.0"
+  }
+}
