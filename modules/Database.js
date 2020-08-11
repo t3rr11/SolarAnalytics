@@ -4,7 +4,7 @@ const DBConfig = require('../../Combined/configs/solar_db_config.json');
 const fetch = require("node-fetch");
 
 //Exports
-module.exports = { InsertData, GetVoltageInfo, GetInverterInfo, GetData };
+module.exports = { InsertData, GetVoltageInfo, GetInverterInfo, GetData, expressPOSTRequest, expressUpdatePOSTRequest, expressGETRequest, expressGETJSON };
 
 //MySQL Connection
 var db;
@@ -57,4 +57,48 @@ async function GetData(url) {
     console.log(`Error: ${ JSON.stringify(response) }`);
     return { 'error': true, 'reason': response };
   }
+}
+
+//Express functions
+async function expressPOSTRequest(req, res, name, sql) {
+  Log.SaveLog("Request", `POST Request; From: ${ req.headers["x-forwarded-for"] } to: ${ name }`);
+  db.query(sql, function(error, rows, fields) {
+    if(!!error) { Log.SaveError(`Error: ${ error }`); res.status(200).send({ error: "Failed" }); }
+    else { if(rows.length > 0) { res.status(200).send({ error: null, data: rows }) } else { res.status(200).send({ error: "No data found" }) } }
+  });
+}
+
+async function expressUpdatePOSTRequest(req, res, name, sql) {
+  Log.SaveLog("Request", `UPDATE POST Request; From: ${ req.headers["x-forwarded-for"] } to: ${ name }`);
+  db.query(sql, function(error, rows, fields) {
+    if(!!error) { Log.SaveError(`Error: ${ error }`); res.status(200).send({ error: "Failed" }); }
+    else { res.status(200).send({ error: null, data: "Successfully updated guild information..." }) }
+  });
+}
+
+async function expressGETRequest(req, res, name, sql) {
+  Log.SaveLog("Request", `GET Request; From: ${ req.headers["x-forwarded-for"] } to: ${ name }`);
+  const timeStart = new Date().getTime();
+  db.query(sql, function(error, rows, fields) {
+    if(!!error) { Log.SaveError(`Error: ${ error }`); res.status(200).send({ error: "Failed" }); }
+    else {
+      if(rows.length > 0) {
+        const ttf = `${ (Math.round(new Date().getTime() - timeStart) / 1000).toFixed(2) }s`;
+        console.log(ttf);
+        res.status(200).send({ error: null, ttf: ttf, data: rows });
+      }
+      else {
+        res.status(200).send({ error: "No data found" })
+      }
+    }
+  });
+}
+
+async function expressGETJSON(req, res, name, url) {
+    Log.SaveLog("Request", `JSON Request; From: ${ req.headers["x-forwarded-for"] } to: ${ name }`);
+    const headers = { headers: { "Content-Type": "application/json" } };
+    const request = await fetch(url, headers);
+    const response = await request.json();
+    if(request.ok) { res.status(200).send({ error: null, data: response }) }
+    else { res.status(200).send({ error: "No data found" }) }
 }
