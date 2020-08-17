@@ -15,9 +15,9 @@ app.use(bodyParser.json({ extended: true }));
 
 //Gets
 app.get("/GetCurrentStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetCurrentStatus`, `SELECT * FROM log ORDER BY id DESC LIMIT 1`); });
-app.get("/GetDailyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetDailyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(1) }" AND "${ Misc.GetDate(0) }"`); });
-app.get("/GetWeeklyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetWeeklyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(7) }" AND "${ Misc.GetDate(0) }"`); });
-app.get("/GetMonthlyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetMonthlyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(31) }" AND "${ Misc.GetDate(0) }"`); });
+app.get("/GetDailyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetDailyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(1) }" AND "${ Misc.GetDate(-1) }"`); });
+app.get("/GetWeeklyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetWeeklyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(7) }" AND "${ Misc.GetDate(-1) }"`); });
+app.get("/GetMonthlyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetMonthlyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(31) }" AND "${ Misc.GetDate(-1) }"`); });
 
 //Data
 var StartupTime = new Date().getTime();
@@ -55,4 +55,4 @@ async function StartUp() {
 
 StartUp();
 
-app.listen(3002, function () { Log.SaveLog("Normal", "Express is listening on port 3002...") });
+app.listen(3100, function () { Log.SaveLog("Normal", "Express is listening on port 3100...") });
