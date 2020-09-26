@@ -46,11 +46,20 @@ async function StartUp() {
       }
       Database.InsertData(Data, function(isError) { if(!isError) { console.log(`Successfully added data: ${ new Date().toLocaleString() }`); } });
     }
-    else { setTimeout(() => { LogData(); }, 10000); }
+    else { setTimeout(() => { LogData(); }, 5000); }
   }
 
   //SetIntervals
-  setInterval(function() { var numbers = [0,1,2,3,4,5,6,7,8,9,10,11]; if(numbers.includes(new Date().getMinutes() / 5)) { if(logged === false) { logged = true; LogData(); } } else { if(logged) { logged = false; } } }, 1000);
+  setInterval(() => {
+      if(new Date().getSeconds() === 0) {
+        if(logged === false) {
+          logged = true;
+          LogData();
+        }
+      }
+      else { if(logged) { logged = false; } }
+    }, 1000
+  );
 };
 
 StartUp();
