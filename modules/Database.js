@@ -4,7 +4,7 @@ const DBConfig = require('../../Combined/configs/solar_db_config.json');
 const fetch = require("node-fetch");
 
 //Exports
-module.exports = { InsertData, GetVoltageInfo, GetInverterInfo, GetData, expressPOSTRequest, expressUpdatePOSTRequest, expressGETRequest, expressGETJSON };
+module.exports = { InsertData, GetVoltageInfo, GetInverterInfo, GetData, expressPOSTRequest, expressUpdatePOSTRequest, expressGETRequest, expressGETJSON, expressGETLive };
 
 //MySQL Connection
 var db;
@@ -95,10 +95,22 @@ async function expressGETRequest(req, res, name, sql) {
 }
 
 async function expressGETJSON(req, res, name, url) {
-    Log.SaveLog("Request", `JSON Request; From: ${ req.headers["x-forwarded-for"] } to: ${ name }`);
-    const headers = { headers: { "Content-Type": "application/json" } };
-    const request = await fetch(url, headers);
-    const response = await request.json();
-    if(request.ok) { res.status(200).send({ error: null, data: response }) }
-    else { res.status(200).send({ error: "No data found" }) }
+  Log.SaveLog("Request", `JSON Request; From: ${ req.headers["x-forwarded-for"] } to: ${ name }`);
+  const headers = { headers: { "Content-Type": "application/json" } };
+  const request = await fetch(url, headers);
+  const response = await request.json();
+  if(request.ok) { res.status(200).send({ error: null, data: response }) }
+  else { res.status(200).send({ error: "No data found" }) }
+}
+
+async function expressGETLive(req, res, name) {
+  Promise.all([await GetInverterInfo(), await GetVoltageInfo()]).then((data) => {
+    res.status(200).send({
+      error: null,
+      data: {
+        inverter: data[0],
+        voltage: data[1]
+      }
+    });
+  });
 }

@@ -18,6 +18,7 @@ app.get("/GetCurrentStatus", async function(req, res) { await Database.expressGE
 app.get("/GetDailyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetDailyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(1) }" AND "${ Misc.GetDate(-1) }"`); });
 app.get("/GetWeeklyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetWeeklyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(7) }" AND "${ Misc.GetDate(-1) }"`); });
 app.get("/GetMonthlyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetMonthlyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(31) }" AND "${ Misc.GetDate(-1) }"`); });
+app.get("/GetLiveData", async function(req, res) { await Database.expressGETLive(req, res, `GetLiveData`) });
 
 //Data
 var StartupTime = new Date().getTime();
