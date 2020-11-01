@@ -39,6 +39,7 @@ function InsertData(data, callback) {
 //Non database functions
 async function GetVoltageInfo() { return await GetData(`http://10.1.1.242/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=0`); }
 async function GetInverterInfo() { return await GetData(`http://10.1.1.242/solar_api/v1/GetInverterRealtimeData.cgi?scope=Device&DataCollection=CumulationInverterData&DeviceId=1`); }
+async function GetRealtimeFlowData() { return await GetData(`http://10.1.1.242/solar_api/v1/GetPowerFlowRealtimeData.fcgi`); }
 async function GetData(url) {
   const headers = { headers: { "Content-Type": "application/json" } };
   const request = await fetch(url, headers);
@@ -104,13 +105,10 @@ async function expressGETJSON(req, res, name, url) {
 }
 
 async function expressGETLive(req, res, name) {
-  Promise.all([await GetInverterInfo(), await GetVoltageInfo()]).then((data) => {
+  Promise.all([await GetRealtimeFlowData()]).then((data) => {
     res.status(200).send({
       error: null,
-      data: {
-        inverter: data[0],
-        voltage: data[1]
-      }
+      data: { liveFlow: data[0] }
     });
   });
 }
