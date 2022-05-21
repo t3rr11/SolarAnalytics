@@ -37,9 +37,9 @@ function InsertData(data, callback) {
 }
 
 //Non database functions
-async function GetVoltageInfo() { return await GetData(`http://10.1.1.242/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=0`); }
-async function GetInverterInfo() { return await GetData(`http://10.1.1.242/solar_api/v1/GetInverterRealtimeData.cgi?scope=Device&DataCollection=CumulationInverterData&DeviceId=1`); }
-async function GetRealtimeFlowData() { return await GetData(`http://10.1.1.242/solar_api/v1/GetPowerFlowRealtimeData.fcgi`); }
+async function GetVoltageInfo() { return await GetData(`http://10.1.1.24/solar_api/v1/GetMeterRealtimeData.cgi?Scope=Device&DeviceId=0`); }
+async function GetInverterInfo() { return await GetData(`http://10.1.1.24/solar_api/v1/GetInverterRealtimeData.cgi?scope=Device&DataCollection=CumulationInverterData&DeviceId=1`); }
+async function GetRealtimeFlowData() { return await GetData(`http://10.1.1.24/solar_api/v1/GetPowerFlowRealtimeData.fcgi`); }
 async function GetData(url) {
   const headers = { headers: { "Content-Type": "application/json" } };
   const request = await fetch(url, headers);
