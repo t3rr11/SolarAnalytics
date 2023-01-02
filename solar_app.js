@@ -14,11 +14,11 @@ app.use(compression());
 app.use(bodyParser.json({ extended: true }));
 
 //Gets
-app.get("/GetCurrentStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetCurrentStatus`, `SELECT * FROM log ORDER BY id DESC LIMIT 1`); });
-app.get("/GetDailyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetDailyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(1) }" AND "${ Misc.GetDate(-1) }"`); });
-app.get("/GetWeeklyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetWeeklyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(7) }" AND "${ Misc.GetDate(-1) }"`); });
-app.get("/GetMonthlyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetMonthlyStatus`, `SELECT * FROM log WHERE datetime BETWEEN "${ Misc.GetDate(31) }" AND "${ Misc.GetDate(-1) }"`); });
-app.get("/GetLiveData", async function(req, res) { await Database.expressGETLive(req, res, `GetLiveData`) });
+app.get("/api/GetCurrentStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetCurrentStatus`, `SELECT * FROM log ORDER BY id DESC LIMIT 1`); });
+app.get("/api/GetDailyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetDailyStatus`, `SELECT * FROM log WHERE datetime >= NOW() - INTERVAL 1 DAY`); });
+app.get("/api/GetWeeklyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetWeeklyStatus`, `SELECT * FROM log WHERE datetime >= NOW() - INTERVAL 7 DAY`); });
+app.get("/api/GetMonthlyStatus", async function(req, res) { await Database.expressGETRequest(req, res, `GetMonthlyStatus`, `SELECT * FROM log WHERE datetime >= NOW() - INTERVAL 31 DAY`); });
+app.get("/api/GetLiveData", async function(req, res) { await Database.expressGETLive(req, res, `GetLiveData`) });
 
 //Data
 var StartupTime = new Date().getTime();
