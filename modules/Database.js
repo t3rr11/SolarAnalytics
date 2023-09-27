@@ -1,6 +1,5 @@
 const MySQL = require('mysql');
 const Log = require("../js/log.js");
-const DBConfig = require('../../Combined/configs/solar_db_config.json');
 const fetch = require("node-fetch");
 
 //Exports
@@ -9,7 +8,12 @@ module.exports = { InsertData, GetVoltageInfo, GetInverterInfo, GetData, express
 //MySQL Connection
 var db;
 function handleDisconnect() {
-  db = MySQL.createConnection(DBConfig);
+  db = MySQL.createConnection({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DATABASE
+  });
   db.connect(function(err) {
     if(err) {
       console.log('Error when connecting to db: ', err);

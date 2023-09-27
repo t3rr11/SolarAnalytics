@@ -9,6 +9,8 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 var app = express();
 
+require('dotenv').config();
+
 app.use(cors());
 app.use(compression());
 app.use(bodyParser.json({ extended: true }));
